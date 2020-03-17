@@ -8,6 +8,8 @@ public class Trainer {
 
     private List<Pokemon> team;
 
+    private String password;
+
     public Trainer() {
     }
 
@@ -29,5 +31,13 @@ public class Trainer {
 
     public List<Pokemon> getTeam(){
         return this.team;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -14,7 +14,7 @@ class PokemonTypeServiceImplTest {
 
     @Test
     void listPokemonsTypes_shouldCallTheRemoteService() {
-        var url = "http://localhost:8080";
+        var url = "http://localhost:8080/";
 
         var restTemplate = mock(RestTemplate.class);
         var pokemonServiceImpl = new PokemonTypeServiceImpl();
@@ -25,7 +25,7 @@ class PokemonTypeServiceImplTest {
         pikachu.setName("pikachu");
         pikachu.setId(25);
 
-        var expectedUrl = "http://localhost:8080/pokemon-types";
+        var expectedUrl = "http://localhost:8080/pokemon-types/";
         when(restTemplate.getForObject(expectedUrl, PokemonType[].class)).thenReturn(new PokemonType[]{pikachu});
 
         var pokemons = pokemonServiceImpl.listPokemonsTypes();

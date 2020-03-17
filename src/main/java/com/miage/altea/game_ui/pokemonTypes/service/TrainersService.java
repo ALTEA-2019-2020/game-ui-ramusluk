@@ -9,4 +9,7 @@ public interface TrainersService {
 
     List<Trainer> listTrainer();
     TrainerWithPokemonTypeDto getTrainer(String name);
+    Trainer getTrainerEntity(String name);
+    List<Trainer> getAllTrainers();
+
 }
