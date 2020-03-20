@@ -1,6 +1,7 @@
 package com.miage.altea.game_ui.controller;
 
 
+import com.miage.altea.game_ui.dto.TrainerWithPokemonTypeDto;
 import com.miage.altea.game_ui.pokemonTypes.bo.Trainer;
 import com.miage.altea.game_ui.pokemonTypes.service.TrainersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,9 @@ public class ProfileController {
     public ModelAndView profile(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User principal = (User) auth.getPrincipal();
-        Trainer trainer =  trainersService.getTrainerEntity(principal.getUsername());
+        TrainerWithPokemonTypeDto trainer =  trainersService.getTrainer(principal.getUsername());
         var modelAndView = new ModelAndView("profile");
         modelAndView.addObject("profile", trainer );
-//        modelAndView.addObject("user", principal );
         return modelAndView;
     }
 

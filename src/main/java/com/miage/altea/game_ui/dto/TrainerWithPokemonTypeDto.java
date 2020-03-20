@@ -1,11 +1,10 @@
 package com.miage.altea.game_ui.dto;
 
-import com.miage.altea.game_ui.pokemonTypes.bo.Pokemon;
-import com.miage.altea.game_ui.pokemonTypes.bo.PokemonType;
+import lombok.Builder;
 
 import java.util.List;
-import java.util.Map;
 
+@Builder
 public class TrainerWithPokemonTypeDto {
 
     private String name;

@@ -7,12 +7,23 @@
 
         <div class="card-deck">
             {{#trainer}}
-            <div class="col-md-3">
-                <div class="card shadow-sm mb-3">
-                        <a class="btn btn-primary"   href="trainers/{{name}}">{{name}}</a>
+                <div class="col-md-3">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal">{{name}} <!--2--></h4>
+                            <div >
+                            </div>
+                        </div>
+                        {{#team}}
+                        <img class="card-img-top" src="{{sprites.front_default}}" alt="Pokemon"
+                             onmouseover= "this.src='{{sprites.back_default}}'" onmouseout= "this.src='{{sprites.front_default}}'"/>
 
+                        <div class="card-body">
+                            <span class="badge badge-secondary">Level {{level}} <!--3--></span>
+                        </div>
+                        {{/team}}
+                    </div>
                 </div>
-            </div>
             {{/trainer}}
         </div>
 

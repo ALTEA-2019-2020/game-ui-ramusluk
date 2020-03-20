@@ -1,5 +1,6 @@
 package com.miage.altea.game_ui.pokemonTypes.service;
 
+import com.miage.altea.game_ui.converter.TrainerConverter;
 import com.miage.altea.game_ui.dto.PokemonDto;
 import com.miage.altea.game_ui.dto.TrainerWithPokemonTypeDto;
 import com.miage.altea.game_ui.pokemonTypes.bo.Pokemon;
@@ -14,6 +15,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +30,8 @@ public class TrainersServiceImpl implements TrainersService {
     public RestTemplate restTemplate;
     public String trainerServiceUrl;
     public PokemonTypeServiceImpl pokemonTypeServiceImpl;
+    @Autowired
+    private TrainerConverter trainerConverter;
 
     @Override
     @Cacheable(value="trainer")
@@ -37,30 +41,17 @@ public class TrainersServiceImpl implements TrainersService {
     }
 
     @Override
-    @Cacheable(value="trainer")
+    @Retryable
+    public List<TrainerWithPokemonTypeDto> listTrainerDto() {
+        return trainerConverter.TrainerListToTrainerWithPokemonTypeDtoList(this.listTrainer());
+    }
+
+    @Override
+    @Cacheable(value="trainerDTO")
     @Retryable
     public TrainerWithPokemonTypeDto getTrainer(String name) {
-        Trainer trainer = restTemplate.getForObject(trainerServiceUrl + "/trainers/" + name, Trainer.class);
-        TrainerWithPokemonTypeDto t = new TrainerWithPokemonTypeDto();
-        t.setName(trainer.getName());
-        List<PokemonDto> team = new ArrayList<>();
-        for (Pokemon p : trainer.getTeam()) {
-            PokemonType pokemonTmp = pokemonTypeServiceImpl.getPokemon(p.getPokemonTypeId());
-            PokemonDto pokemonDto = new PokemonDto(
-                    pokemonTmp.getName(),
-                    p.getLevel(),
-                    pokemonTmp.getId(),
-                    pokemonTmp.getBaseExperience(),
-                    pokemonTmp.getHeight(),
-                    pokemonTmp.getSprites(),
-                    pokemonTmp.getStats(),
-                    pokemonTmp.getWeight(),
-                    pokemonTmp.getTypes());
-            team.add(pokemonDto);
-
-        }
-        t.setTeam(team);
-        return t;
+        TrainerWithPokemonTypeDto trainer = trainerConverter.TrainerToTrainerWithPokemonTypeDto(restTemplate.getForObject(trainerServiceUrl + "/trainers/" + name, Trainer.class));
+        return trainer;
     }
 
     @Override
@@ -77,11 +68,16 @@ public class TrainersServiceImpl implements TrainersService {
     @Retryable
     public List<Trainer> getAllTrainers() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Principal principal = (Principal) auth.getPrincipal();
+        User principal = (User) auth.getPrincipal();
         return List.of(restTemplate.getForObject(trainerServiceUrl + "/trainers/", Trainer[].class))
                 .stream()
-                .filter(trainer -> !principal.getName().equals(trainer.getName()))
+                .filter(trainer -> !principal.getUsername().equals(trainer.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TrainerWithPokemonTypeDto> getAllTrainersDto() {
+        return this.trainerConverter.TrainerListToTrainerWithPokemonTypeDtoList(this.getAllTrainers());
     }
 
     @Autowired

@@ -8,8 +8,9 @@ import java.util.List;
 public interface TrainersService {
 
     List<Trainer> listTrainer();
+    List<TrainerWithPokemonTypeDto> listTrainerDto();
     TrainerWithPokemonTypeDto getTrainer(String name);
     Trainer getTrainerEntity(String name);
     List<Trainer> getAllTrainers();
-
+    List<TrainerWithPokemonTypeDto> getAllTrainersDto();
 }

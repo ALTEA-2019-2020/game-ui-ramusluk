@@ -2,10 +2,11 @@ package com.miage.altea.game_ui.dto;
 
 import com.miage.altea.game_ui.pokemonTypes.bo.Sprites;
 import com.miage.altea.game_ui.pokemonTypes.bo.Stats;
+import lombok.Builder;
 
 import java.util.List;
 
-
+@Builder
 public class PokemonDto {
 
     private String name;

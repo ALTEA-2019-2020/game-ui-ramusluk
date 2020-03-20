@@ -2,11 +2,42 @@
 
 <body>
 {{> layout/navbar}}
+
 <div class="container">
-    <h1 class="pt-md-5 pb-md-5">Profile</h1>
+    {{#user}}
+    <h1 class="pt-md-5 pb-md-5">{{username}}</h1>
+    {{/user}}
 
 
+    {{#profile}}
+    <div class="card-deck">
+        {{#profile.team}}
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{name}} <!--2--><span class="badge badge-secondary">Id {{id}} <!--3--></span></h4>
+                    <div >
+                        <p class="my-0 font-weight-normal"> Type :
+                            {{#types}}
+                            {{.}}
+                            {{/types}}
+                        </p>
+                    </div>
+                </div>
+                <img class="card-img-top" src="{{sprites.front_default}}" alt="Pokemon"
+                     onmouseover= "this.src='{{sprites.back_default}}'" onmouseout= "this.src='{{sprites.front_default}}'"/>
 
+                <div class="card-body">
+                    <span class="badge badge-primary">Speed : {{stats.speed}}</span>
+                    <span class="badge badge-primary">Attack : {{stats.attack}}</span>
+                    <span class="badge badge-primary">Defense : {{stats.defense}}</span>
+                    <span class="badge badge-primary">HP : {{stats.hp}}</span>
+                </div>
+            </div>
+        </div>
+        {{/profile.team}}
+    </div>
+    {{/profile}}
 </div>
 
 </body>
