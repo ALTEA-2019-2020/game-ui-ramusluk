@@ -7,23 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
+
 @Controller
 
-public class TrainersController {
+public class BattleController {
 
     public TrainersService trainersService;
 
-    @GetMapping(value = "/trainers")
-    public ModelAndView trainers(){
-        var modelAndView = new ModelAndView("trainers");
-        modelAndView.addObject("trainer", trainersService.getAllTrainersDto());
-        return modelAndView;
-    }
+    @GetMapping("/fight/{opponent}")
+    public ModelAndView fight(Principal principal, @PathVariable String opponent){
+        var modelAndView = new ModelAndView("fight");
 
-    @GetMapping(value = "/trainers/{name}")
-    public ModelAndView trainer(@PathVariable String name){
-        var modelAndView = new ModelAndView("trainer");
-        modelAndView.addObject("trainer", trainersService.getTrainer(name));
+        modelAndView.addObject("trainerName", principal.getName());
+        modelAndView.addObject("opponentName", opponent);
+
         return modelAndView;
     }
 
